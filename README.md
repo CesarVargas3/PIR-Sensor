@@ -41,6 +41,7 @@ La señal de un sensor PIR generalmente requiere ser acondicionada antes de ser 
 Es importante tener en cuenta que el acondicionamiento de la señal puede variar según la aplicación y los requisitos del sistema en el que se utiliza el sensor PIR. Los pasos mencionados anteriormente son una guía general, pero pueden adaptarse y personalizarse según las necesidades específicas de cada caso.
 
 ### **Etapa 1**
+
 La primera etapa arquitectónica amplifica la señal. Cancela la parte DC de la señal yfiltra el ruido de alta frecuencia que podría conducir a detecciones falsas. El esquema de este La primera etapa arquitectónica se muestra en la imagen "Etapa1".
 
 La figura 3 muestra que el ruido se filtra gracias a los componentes R1 y C1. el corte la frecuencia es de 5 Hz (fhigh1 = 1/(2 x π x R1 x C1)). Esta aplicación no necesita funcionar en frecuencias más altas porque generalmente estamos detectando movimiento humano. El segundo filtro se utiliza para rechazar la parte de CC de la señal. R2 y C2 realizan un pase alto filtro que tiene una frecuencia de corte de 0,6 Hz (flow1 = 1/(2 x π x R2 x C2)). 
@@ -61,3 +62,12 @@ Al igual que con la etapa 1, el Vio del amplificador operacional no tiene import
 Requisito de 2,6 kHz.
 
 El amplificador operacional TSU101 es muy adecuado para esta etapa arquitectónica. Su bajo consumo es particularmente ventajoso. Aunque es un amplificador operacional de nanopotencia, su GBP es más alto que 2,6kHz Tenga en cuenta que TSU101 también está disponible en canal doble (TSU102) y cuádruple (TSU104) versiones para optimizar la huella a bordo
+
+### **Etapa 3**
+
+La tercera y última etapa arquitectónica permite al usuario realizar un comparador de ventanas. Como consecuencia, la señal está perfectamente acondicionada para ir a un microcontrolador.
+
+Cuando se detecta una fuente de calor, la salida del amplificador operacional U3 y/o U4 está en estado bajo. El puente divisor, compuesto por las resistencias R6, R7, R8 y R9, se utiliza para establecer la referencia de voltaje de estos dispositivos. El amplificador operacional TSU101 es un amplificador operacional de riel a riel de entrada/salida, y no hay restricciones en el voltaje de modo común de entrada. Por lo tanto, mientras las referencias de voltaje de U3 y U4 estén dentro del rango de Vcc, el comparador de ventana funciona. Cuando la señal (Vout2) está por encima de esta referencia (2,77 V si Vcc = 3,3 V), la salida de U3 está en estado bajo, cerca de tierra.
+
+
+
