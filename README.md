@@ -40,7 +40,24 @@ La señal de un sensor PIR generalmente requiere ser acondicionada antes de ser 
 
 Es importante tener en cuenta que el acondicionamiento de la señal puede variar según la aplicación y los requisitos del sistema en el que se utiliza el sensor PIR. Los pasos mencionados anteriormente son una guía general, pero pueden adaptarse y personalizarse según las necesidades específicas de cada caso.
 
+### **Etapa 1**
+La primera etapa arquitectónica amplifica la señal. Cancela la parte DC de la señal yfiltra el ruido de alta frecuencia que podría conducir a detecciones falsas. El esquema de este La primera etapa arquitectónica se muestra en la imagen "Etapa1".
 
+La figura 3 muestra que el ruido se filtra gracias a los componentes R1 y C1. el corte la frecuencia es de 5 Hz (fhigh1 = 1/(2 x π x R1 x C1)). Esta aplicación no necesita funcionar en frecuencias más altas porque generalmente estamos detectando movimiento humano. El segundo filtro se utiliza para rechazar la parte de CC de la señal. R2 y C2 realizan un pase alto filtro que tiene una frecuencia de corte de 0,6 Hz (flow1 = 1/(2 x π x R2 x C2)). 
 
+Como no amplificamos la parte de CC de la señal, el Vio, que es el voltaje de compensación de entrada del amplificador operacional, no tiene importancia en esta aplicación.
+La ganancia de etapa es 53,3 (Ganancia1 = 1 + R1/R2). Esta amplificación permite una señal utilizable que es superior al nivel de ruido. El sesgo DC de la primera etapa arquitectónica está determinado por el sensor. Para evitar la saturación, la ganancia no debe ser demasiado grande porque la amplificación se hace alrededor de este voltaje de modo común (que no es Vcc/2).
 
+El amplificador operacional TSU101 de STMicroelectronics encaja perfectamente en esta etapa arquitectónica. Así como Al tener un consumo muy bajo, el TSU101 opera con un consumo de corriente típico de solo 600 nA a Vcc = 3,3 V.
 
+### **Etapa 2**
+
+En cuanto a la función de filtrado, las frecuencias de corte bajas y altas respectivamente son de 0,6 Hz (flujo2 = 1/(2 x π x R4 x C4)) y 5 Hz (fhigh2 = 1/(2 x π x R3 x C3)). La ganancia de esta etapa es -52,3 (Ganancia2 = -R3/R4). Esta ganancia significa que después de la etapa 2 la señal entre 0,6 Hz y 5 Hz habrá sido amplificado 2790 veces (69 dB).
+
+En la etapa 2, el puente divisor compuesto por R6 establece el voltaje de modo común del amplificador operacional, R7, R8 y R9 a Vcc/2. Esto permite una mayor amplificación de la señal de CA.
+
+Al igual que con la etapa 1, el Vio del amplificador operacional no tiene importancia ya que la parte de CC de la señal es no amplificado. Además, no hay restricción en el producto de ganancia de ancho de banda (GBP), porque el amplificador operacional tiene que tener un GBP superior a 2,6 kHz (fhigh2 x gain x 10). un factor de
+10 se ha utilizado para evitar cualquier limitación por parte de la GBP. Casi todos los amplificadores GBP se ajustan a esto
+Requisito de 2,6 kHz.
+
+El amplificador operacional TSU101 es muy adecuado para esta etapa arquitectónica. Su bajo consumo es particularmente ventajoso. Aunque es un amplificador operacional de nanopotencia, su GBP es más alto que 2,6kHz Tenga en cuenta que TSU101 también está disponible en canal doble (TSU102) y cuádruple (TSU104) versiones para optimizar la huella a bordo
