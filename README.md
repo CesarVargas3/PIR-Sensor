@@ -1,4 +1,4 @@
-# **Acondicionamiento del sensor PIR D203S**
+# **Tarjeta de evaluación para el sensor PIR D203S**
 
 Hola!
 
